@@ -1,4 +1,5 @@
 import { BrowserRouter as Router } from 'react-router-dom'
+import { useEffect } from 'react'
 import Navbar from './components/layout/Navbar'
 import HeroSection from './components/sections/HeroSection'
 import AboutSection from './components/sections/AboutSection'
@@ -10,6 +11,11 @@ import Footer from './components/Footer'
 import './App.css'
 
 function App() {
+  // Set the document title
+  useEffect(() => {
+    document.title = 'Ashish Portfolio';
+  }, []);
+
   return (
     <Router>
       <div className="bg-dark text-white">
