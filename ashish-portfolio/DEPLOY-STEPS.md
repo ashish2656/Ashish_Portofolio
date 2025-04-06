@@ -26,9 +26,9 @@ git push
 3. **Configure Build Settings**
    - Owner: Your Netlify team
    - Branch to deploy: `main` (or your default branch)
-   - Base directory: `ashish-portfolio` (since your frontend is in this subdirectory)
+   - **IMPORTANT**: Base directory: `ashish-portfolio` (since your frontend is in this subdirectory)
    - Build command: `npm run build`
-   - Publish directory: `dist`
+   - Publish directory: `dist` (this is relative to the base directory)
    - Click "Show advanced" and add these environment variables:
      - `EMAIL_USER`: Your Gmail address
      - `EMAIL_PASS`: Your Gmail app password
@@ -37,6 +37,13 @@ git push
 4. **Deploy**
    - Click "Deploy site"
    - Wait for the deployment to complete
+
+5. **If you encounter a 404 error**:
+   - Go to Site settings > Build & deploy > Continuous Deployment
+   - Click "Edit settings"
+   - Verify the Base directory is set to `ashish-portfolio`
+   - Verify the Publish directory is set to `dist`
+   - Save and trigger a new deployment
 
 ## 3. After Deployment
 
