@@ -1,0 +1,26 @@
+{
+  "name": "ashish-portfolio-full",
+  "version": "1.0.0",
+  "description": "Full-stack portfolio website for Ashish Dodiya",
+  "scripts": {
+    "client": "cd ashish-portfolio && npm run dev",
+    "server": "cd backend && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-all": "npm install && cd ashish-portfolio && npm install && cd ../backend && npm install",
+    "build": "cd ashish-portfolio && npm run build",
+    "start": "cd backend && npm start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "portfolio",
+    "mern",
+    "react",
+    "express",
+    "nodejs"
+  ],
+  "author": "Ashish Dodiya",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 

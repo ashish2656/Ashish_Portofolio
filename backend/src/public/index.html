@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ashish Dodiya Portfolio API</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+      color: #2c3e50;
+    }
+    h2 {
+      color: #3498db;
+      margin-top: 30px;
+    }
+    pre {
+      background-color: #f8f9fa;
+      border-left: 4px solid #3498db;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .endpoint {
+      background-color: #e9f7fe;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    .method {
+      background-color: #3498db;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ashish Dodiya Portfolio API</h1>
+  
+  <p>Welcome to the backend API for Ashish Dodiya's portfolio website. This API handles contact form submissions and other backend functionality.</p>
+  
+  <h2>API Endpoints</h2>
+  
+  <div class="endpoint">
+    <h3><span class="method">POST</span> /api/contact</h3>
+    <p>Sends a message from the contact form to the site owner via email.</p>
+    
+    <h4>Request Body:</h4>
+    <pre><code>{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "subject": "Project Inquiry",
+  "message": "I'm interested in working with you on a project."
+}</code></pre>
+    
+    <h4>Response (Success):</h4>
+    <pre><code>{
+  "success": true,
+  "message": "Your message has been sent successfully!"
+}</code></pre>
+    
+    <h4>Response (Error):</h4>
+    <pre><code>{
+  "success": false,
+  "error": "Error message details"
+}</code></pre>
+  </div>
+  
+  <h2>Implementation Notes</h2>
+  <ul>
+    <li>This API uses Express.js for routing and middleware.</li>
+    <li>Email delivery is handled through Nodemailer with Gmail SMTP.</li>
+    <li>CORS is enabled for the frontend origin.</li>
+  </ul>
+  
+  <footer style="margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; color: #777;">
+    <p>&copy; 2023 Ashish Dodiya. All Rights Reserved.</p>
+  </footer>
+</body>
+</html> 
