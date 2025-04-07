@@ -1,9 +1,9 @@
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
-import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaLinkedin, FaGithub, FaTwitter, FaPaperPlane, FaWhatsapp, FaFileAlt, FaTimes, FaDownload } from 'react-icons/fa'
+import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaLinkedin, FaGithub, FaTwitter, FaPaperPlane, FaWhatsapp, FaFileAlt, FaTimes, FaDownload, FaArrowLeft, FaWindowMaximize } from 'react-icons/fa'
 import { sendContactMessage, ContactFormData } from '../../services/api'
 
-// Resume modal component
+// Resume modal component for full-screen view
 interface ResumeModalProps {
   isOpen: boolean
   onClose: () => void
@@ -93,6 +93,119 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
+// Resume card with flip animation
+const FlipResumeCard = () => {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageSrc, setImageSrc] = useState<string>('./img/Resume.png');
+  const [imageError, setImageError] = useState<boolean>(false);
+  
+  const handleFlip = () => {
+    setIsFlipped(!isFlipped);
+  };
+  
+  const openModal = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering card flip
+    setIsModalOpen(true);
+  };
+  
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  
+  const handleImageError = () => {
+    // Try alternate paths when the image fails to load
+    if (imageSrc === './img/Resume.png') {
+      setImageSrc('/img/Resume.png');
+    } else if (imageSrc === '/img/Resume.png') {
+      setImageSrc('./Resume.png');
+    } else if (imageSrc === './Resume.png') {
+      setImageSrc('/Resume.png');
+    } else {
+      setImageError(true);
+    }
+  };
+  
+  return (
+    <>
+      <div className="relative w-full h-[300px] perspective-1000 mt-4">
+        <motion.div
+          className="w-full h-full relative preserve-3d"
+          initial={false}
+          animate={{ rotateY: isFlipped ? 180 : 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          {/* Front of card (Resume button) */}
+          <motion.div
+            className="glass-card p-6 rounded-xl border border-gray-800 w-full h-full flex items-center justify-between hover:border-neon-purple/50 transition-colors group absolute inset-0 backface-hidden cursor-pointer"
+            onClick={handleFlip}
+          >
+            <div className="flex items-center">
+              <div className="w-12 h-12 rounded-full glass-card flex items-center justify-center border border-gray-700 text-neon-purple">
+                <FaFileAlt size={20} />
+              </div>
+              <div className="ml-4 text-left">
+                <h4 className="text-white font-bold">View Resume</h4>
+                <p className="text-gray-400 text-sm">Click to flip and see my resume</p>
+              </div>
+            </div>
+            <span className="text-neon-purple group-hover:translate-x-1 transition-transform">
+              →
+            </span>
+          </motion.div>
+          
+          {/* Back of card (Resume preview) */}
+          <motion.div
+            className="glass-card rounded-xl overflow-hidden absolute inset-0 backface-hidden rotate-y-180 p-4 flex flex-col border border-gray-800"
+          >
+            <div className="flex justify-between items-center mb-3">
+              <button 
+                onClick={handleFlip}
+                className="text-white hover:text-neon-purple transition-colors flex items-center"
+              >
+                <FaArrowLeft className="mr-2" />
+                <span>Flip Back</span>
+              </button>
+              <button
+                onClick={openModal}
+                className="text-white hover:text-neon-purple transition-colors flex items-center"
+                title="View Full Size"
+              >
+                <FaWindowMaximize className="mr-2" />
+                <span>Full Screen</span>
+              </button>
+            </div>
+            
+            <div className="flex-grow flex items-center justify-center overflow-hidden">
+              {!imageError ? (
+                <img 
+                  src={imageSrc}
+                  alt="Ashish Dodiya Resume" 
+                  className="max-w-full max-h-[220px] object-contain rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={openModal}
+                  onError={handleImageError}
+                />
+              ) : (
+                <div className="text-white p-4 text-center">
+                  <div className="mb-2 text-red-500 text-2xl">⚠️</div>
+                  <h3 className="text-lg font-bold mb-1">Resume Not Available</h3>
+                  <p className="text-gray-300 text-sm">Please try again later or contact me directly.</p>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+      
+      {/* Modal for full screen resume view */}
+      <ResumeModal 
+        isOpen={isModalOpen} 
+        onClose={closeModal} 
+      />
+    </>
+  );
+};
+
 const ContactSection = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.1 })
@@ -105,7 +218,6 @@ const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState(false)
-  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false)
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -146,14 +258,6 @@ const ContactSection = () => {
       setIsSubmitting(false);
     }
   }
-
-  const openResumeModal = () => {
-    setIsResumeModalOpen(true);
-  };
-
-  const closeResumeModal = () => {
-    setIsResumeModalOpen(false);
-  };
 
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -324,27 +428,14 @@ const ContactSection = () => {
               </p>
             </motion.div>
 
-            {/* Resume button */}
-            <motion.button
-              className="glass-card p-6 rounded-xl mt-4 border border-gray-800 w-full flex items-center justify-between hover:border-neon-purple/50 transition-colors group"
+            {/* Resume flip card */}
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.5, delay: 0.8 }}
-              onClick={openResumeModal}
             >
-              <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full glass-card flex items-center justify-center border border-gray-700 text-neon-purple">
-                  <FaFileAlt size={20} />
-                </div>
-                <div className="ml-4 text-left">
-                  <h4 className="text-white font-bold">View Resume</h4>
-                  <p className="text-gray-400 text-sm">Click to see my full resume</p>
-                </div>
-              </div>
-              <span className="text-neon-purple group-hover:translate-x-1 transition-transform">
-                →
-              </span>
-            </motion.button>
+              <FlipResumeCard />
+            </motion.div>
           </motion.div>
 
           {/* Contact form */}
@@ -484,9 +575,6 @@ const ContactSection = () => {
           </motion.div>
         </div>
       </div>
-
-      {/* Resume Modal */}
-      <ResumeModal isOpen={isResumeModalOpen} onClose={closeResumeModal} />
     </section>
   )
 }
