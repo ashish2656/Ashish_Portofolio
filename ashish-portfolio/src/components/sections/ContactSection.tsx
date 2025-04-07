@@ -1,5 +1,5 @@
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaLinkedin, FaGithub, FaTwitter, FaPaperPlane, FaWhatsapp, FaFileAlt, FaTimes, FaDownload } from 'react-icons/fa'
 import { sendContactMessage, ContactFormData } from '../../services/api'
 
@@ -10,6 +10,30 @@ interface ResumeModalProps {
 }
 
 const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
+  const [imageSrc, setImageSrc] = useState<string>('./img/Reume.png');
+  const [imageError, setImageError] = useState<boolean>(false);
+  
+  // Reset error state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setImageError(false);
+      setImageSrc('./img/Reume.png');
+    }
+  }, [isOpen]);
+  
+  const handleImageError = () => {
+    // Try alternate paths when the image fails to load
+    if (imageSrc === './img/Reume.png') {
+      setImageSrc('/img/Reume.png');
+    } else if (imageSrc === '/img/Reume.png') {
+      setImageSrc('./Reume.png');
+    } else if (imageSrc === './Reume.png') {
+      setImageSrc('/Reume.png');
+    } else {
+      setImageError(true);
+    }
+  };
+  
   if (!isOpen) return null;
   
   return (
@@ -32,7 +56,7 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
           >
             <div className="flex justify-between absolute -top-12 w-full">
               <a 
-                href="/img/Reume.png" 
+                href={imageSrc}
                 download="Ashish_Dodiya_Resume.png"
                 className="text-white hover:text-neon-green transition-colors flex items-center"
               >
@@ -46,11 +70,22 @@ const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
                 <FaTimes size={24} />
               </button>
             </div>
-            <img 
-              src="/img/Reume.png" 
-              alt="Ashish Dodiya Resume" 
-              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
-            />
+            <div className="bg-gray-900 rounded-lg shadow-2xl p-1 max-w-full max-h-[85vh]">
+              {!imageError ? (
+                <img 
+                  src={imageSrc}
+                  alt="Ashish Dodiya Resume" 
+                  className="max-w-full max-h-[85vh] object-contain rounded-lg"
+                  onError={handleImageError}
+                />
+              ) : (
+                <div className="text-white p-8 text-center">
+                  <div className="mb-4 text-red-500 text-4xl">⚠️</div>
+                  <h3 className="text-xl font-bold mb-2">Resume Image Not Available</h3>
+                  <p className="text-gray-300">Please try again later or contact me directly for my resume.</p>
+                </div>
+              )}
+            </div>
           </motion.div>
         </motion.div>
       )}
