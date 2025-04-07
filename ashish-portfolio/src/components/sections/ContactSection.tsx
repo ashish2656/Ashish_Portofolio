@@ -1,7 +1,62 @@
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useState } from 'react'
-import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaLinkedin, FaGithub, FaTwitter, FaPaperPlane, FaWhatsapp } from 'react-icons/fa'
+import { FaEnvelope, FaMapMarkerAlt, FaPhone, FaLinkedin, FaGithub, FaTwitter, FaPaperPlane, FaWhatsapp, FaFileAlt, FaTimes, FaDownload } from 'react-icons/fa'
 import { sendContactMessage, ContactFormData } from '../../services/api'
+
+// Resume modal component
+interface ResumeModalProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        >
+          <motion.div 
+            className="relative max-w-5xl max-h-[90vh]"
+            initial={{ scale: 0.5 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.5 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between absolute -top-12 w-full">
+              <a 
+                href="/img/Reume.png" 
+                download="Ashish_Dodiya_Resume.png"
+                className="text-white hover:text-neon-green transition-colors flex items-center"
+              >
+                <FaDownload className="mr-2" />
+                <span>Download Resume</span>
+              </a>
+              <button 
+                className="text-white hover:text-neon-purple transition-colors"
+                onClick={onClose}
+              >
+                <FaTimes size={24} />
+              </button>
+            </div>
+            <img 
+              src="/img/Reume.png" 
+              alt="Ashish Dodiya Resume" 
+              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+            />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
 
 const ContactSection = () => {
   const ref = useRef(null)
@@ -15,6 +70,7 @@ const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState(false)
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false)
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -55,6 +111,14 @@ const ContactSection = () => {
       setIsSubmitting(false);
     }
   }
+
+  const openResumeModal = () => {
+    setIsResumeModalOpen(true);
+  };
+
+  const closeResumeModal = () => {
+    setIsResumeModalOpen(false);
+  };
 
   const formVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -224,6 +288,28 @@ const ContactSection = () => {
                 Response time: Within 24 hours
               </p>
             </motion.div>
+
+            {/* Resume button */}
+            <motion.button
+              className="glass-card p-6 rounded-xl mt-4 border border-gray-800 w-full flex items-center justify-between hover:border-neon-purple/50 transition-colors group"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              onClick={openResumeModal}
+            >
+              <div className="flex items-center">
+                <div className="w-12 h-12 rounded-full glass-card flex items-center justify-center border border-gray-700 text-neon-purple">
+                  <FaFileAlt size={20} />
+                </div>
+                <div className="ml-4 text-left">
+                  <h4 className="text-white font-bold">View Resume</h4>
+                  <p className="text-gray-400 text-sm">Click to see my full resume</p>
+                </div>
+              </div>
+              <span className="text-neon-purple group-hover:translate-x-1 transition-transform">
+                →
+              </span>
+            </motion.button>
           </motion.div>
 
           {/* Contact form */}
@@ -363,6 +449,9 @@ const ContactSection = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Resume Modal */}
+      <ResumeModal isOpen={isResumeModalOpen} onClose={closeResumeModal} />
     </section>
   )
 }
