@@ -10,25 +10,25 @@ interface ResumeModalProps {
 }
 
 const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
-  const [imageSrc, setImageSrc] = useState<string>('./img/Reume.png');
+  const [imageSrc, setImageSrc] = useState<string>('./img/Resume.png');
   const [imageError, setImageError] = useState<boolean>(false);
   
   // Reset error state when modal opens
   useEffect(() => {
     if (isOpen) {
       setImageError(false);
-      setImageSrc('./img/Reume.png');
+      setImageSrc('./img/Resume.png');
     }
   }, [isOpen]);
   
   const handleImageError = () => {
     // Try alternate paths when the image fails to load
-    if (imageSrc === './img/Reume.png') {
-      setImageSrc('/img/Reume.png');
-    } else if (imageSrc === '/img/Reume.png') {
-      setImageSrc('./Reume.png');
-    } else if (imageSrc === './Reume.png') {
-      setImageSrc('/Reume.png');
+    if (imageSrc === './img/Resume.png') {
+      setImageSrc('/img/Resume.png');
+    } else if (imageSrc === '/img/Resume.png') {
+      setImageSrc('./Resume.png');
+    } else if (imageSrc === './Resume.png') {
+      setImageSrc('/Resume.png');
     } else {
       setImageError(true);
     }
