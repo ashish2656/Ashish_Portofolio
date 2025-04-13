@@ -221,9 +221,9 @@ const ExperienceSection = () => {
 
   const achievements = [
     {
-      title: 'Oddo X MSU Participation',
-      organization: 'Michigan State University',
-      description: 'Participated in the Oddo X MSU collaborative program, working on innovative solutions using Oddo\'s ERP framework. Developed practical skills in enterprise resource planning software and business process automation.',
+      title: 'Odoo x MSU Hackathon',
+      organization: 'Odoo',
+      description: 'Participated in the Odoo x MSU hackathon and presented the Thrive Together project, a collaborative platform built using Odoo\'s ERP framework. Developed practical skills in enterprise resource planning software and business process automation.',
       icon: <FaTrophy size={24} />,
       color: 'neon-purple',
       certificate: '/img/ODOO.png',
