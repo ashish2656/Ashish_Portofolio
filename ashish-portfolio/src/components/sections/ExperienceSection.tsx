@@ -227,6 +227,7 @@ const ExperienceSection = () => {
       icon: <FaTrophy size={24} />,
       color: 'neon-purple',
       certificate: '/img/ODOO.png',
+      // Updated on 2024-03-21 to focus on Thrive Together project
     },
     {
       title: 'Red Hat Linux 9 Course',
